@@ -27,8 +27,7 @@ public class ChunkServer implements ChunkServerInterface {
 	 * Initialize the chunk server
 	 */
 	public ChunkServer() {
-		System.out.println(
-				"Constructor of ChunkServer is invoked:  Part 1 of TinyFS must implement the body of this method.");
+		//System.out.println("Constructor of ChunkServer is invoked:  Part 1 of TinyFS must implement the body of this method.");
 		//System.out.println("It does nothing for now.\n");
 		
 		// Read the metadata file
@@ -59,7 +58,7 @@ public class ChunkServer implements ChunkServerInterface {
 	 * in the file.
 	 */
 	public String initializeChunk() {
-		System.out.println("createChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
+		//System.out.println("createChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
 		//System.out.println("Returns null for now.\n");
 		
 		// Allocates (Creates) a new chunk in the chunk server of size ChunkSize
@@ -86,7 +85,7 @@ public class ChunkServer implements ChunkServerInterface {
 			bw.write(Long.toString(counter));
 			bw.close();
 			
-			System.out.println("Initialization Successful");
+			//System.out.println("Initialization Successful");
 			return handle;
 		}
 		catch(IOException ioe)
@@ -101,7 +100,7 @@ public class ChunkServer implements ChunkServerInterface {
 	 * should be no greater than 4KB
 	 */
 	public boolean putChunk(String ChunkHandle, byte[] payload, int offset) {
-		System.out.println("writeChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
+		//System.out.println("writeChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
 		// System.out.println("Returns false for now.\n");
 		
 		// Read the specified chunk
@@ -118,7 +117,7 @@ public class ChunkServer implements ChunkServerInterface {
 			fos.write(chunk);
 			fos.close();
 			
-			System.out.println("putChunk Successful");
+			//System.out.println("putChunk Successful");
 			return true;
 		}
 		catch(IOException ioe)
@@ -132,7 +131,7 @@ public class ChunkServer implements ChunkServerInterface {
 	 * read the chunk at the specific byte offset
 	 */
 	public byte[] getChunk(String ChunkHandle, int offset, int NumberOfBytes) {
-		System.out.println("readChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
+		//System.out.println("readChunk invoked:  Part 1 of TinyFS must implement the body of this method.");
 		//System.out.println("Returns null for now.\n");
 		
 		// Read the chunk specified by the chunk handle
