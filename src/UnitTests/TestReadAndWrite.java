@@ -9,42 +9,41 @@ import com.client.Client;
 
 /**
  * A utility used by the UnitTests
- * 
- * @author Shahram Ghandeharizadeh
+ * @author Shahram Ghandeharizaden
  *
  */
 
 public class TestReadAndWrite {
-
+	
 	public static ChunkServer cs = new ChunkServer();
 	public static Client client = new Client();
-
+	
 	/**
-	 * Create and write chunk(s) of a physical file. The default full chunk size is
-	 * 4K. Note that the last chunk of the file may not have the size 4K. The
-	 * sequence of chunk handles are returned, which are stored in a static map.
+	 * Create and write chunk(s) of a physical file.
+	 * The default full chunk size is 4K. Note that the last chunk of the file may not have the size 4K.
+	 * The sequence of chunk handles are returned, which are stored in a static map.
 	 */
 	public String[] createFile(File f) {
 		try {
 			RandomAccessFile raf = new RandomAccessFile(f.getAbsolutePath(), "rw");
 			raf.seek(0);
 			long size = f.length();
-			int num = (int) Math.ceil((double) size / cs.ChunkSize);
+			int num = (int)Math.ceil((double)size / cs.ChunkSize);
 			String[] ChunkHandles = new String[num];
 			String handle = null;
 			byte[] chunkArr = new byte[cs.ChunkSize];
-			for (int i = 0; i < num; i++) {
+			for(int i = 0; i < num; i++){
 				handle = client.initializeChunk();
 				ChunkHandles[i] = handle;
 				raf.read(chunkArr, 0, cs.ChunkSize);
 				boolean isWritten = client.putChunk(handle, chunkArr, 0);
-				if (isWritten == false) {
+				if(isWritten == false){
 					throw new IOException("Cannot write a chunk to the chunk server!");
 				}
 			}
 			raf.close();
 			return ChunkHandles;
-		} catch (IOException ie) {
+		} catch (IOException ie){
 			return null;
 		}
 	}

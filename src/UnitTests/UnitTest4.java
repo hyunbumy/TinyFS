@@ -4,7 +4,6 @@ import java.io.File;
 
 /**
  * UnitTest4 for Part 1 of TinyFS
- * 
  * @author Shahram Ghandeharizadeh
  *
  */
@@ -12,26 +11,25 @@ import java.io.File;
 public class UnitTest4 {
 
 	/**
-	 * This unit test uses a file (e.g., an image) and stores it as a sequence of
-	 * chunks
+	 * This unit test uses a file (e.g., an image) and stores it as a sequence of chunks
 	 */
-	static String[] MyChunks; // This array maintains chunk handles that are created
-
+    static String[] MyChunks;  //This array maintains chunk handles that are created
+    
 	public static void main(String[] args) {
-		// read a physical file
+		//read a physical file
 		String filePath = "obama.jpg";
 		File fin = new File(filePath);
-		if (!fin.exists()) {
+		if(!fin.exists()){
 			System.out.println("The file doesn't exist!");
 		}
-		// create and write chunk(s) of the file
+		//create and write chunk(s) of the file
 		TestReadAndWrite trw = new TestReadAndWrite();
 		MyChunks = trw.createFile(fin);
-		if (MyChunks != null) {
-			System.out.println("Unit test 4 result: success!");
-		} else {
-			System.out.println("Unit test 4 result: fail!");
-		}
+		if(MyChunks != null){
+        	System.out.println("Unit test 4 result: success!");
+        }else{
+        	System.out.println("Unit test 4 result: fail!");
+        }
 	}
 
 }
