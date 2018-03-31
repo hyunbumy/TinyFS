@@ -15,7 +15,7 @@ import com.interfaces.ChunkServerInterface;
  */
 
 public class ChunkServer implements ChunkServerInterface {
-	final static String filePath = "csci485/";	//or C:\\newfile.txt
+	final static String filePath = "c:\\Users\\didgu\\TinyFS-disk";	//or C:\\newfile.txt
 	public static long counter;
 	
 	/**
