@@ -7,6 +7,8 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.client.Request;
+
 public class Server {
 	
 	// Instantiate a ChunkServer
@@ -42,13 +44,13 @@ public class Server {
 		try {
 			System.out.println("Waiting for a connection...");
 			socket = ss.accept();
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			ois = new ObjectInputStream(socket.getInputStream());
 		} catch(IOException ioe) {
-			System.out.println("Connection failed");
+			ioe.printStackTrace();
+			System.out.println("Connection failed\r\n");
+			return null;
 		}
 		
-		System.out.println("A client is connected");
+		System.out.println("A client is connected\r\n");
 		return socket;
 	}
 	
@@ -56,9 +58,52 @@ public class Server {
 		while(true) {
 			socket = establishConnection();
 			
-			while(socket != null) {
-				
+			try {			
+				if (socket != null) {
+					oos = new ObjectOutputStream(socket.getOutputStream());
+					ois = new ObjectInputStream(socket.getInputStream());
+				}
+				while(true) {
+					Request cmd = (Request) ois.readObject();
+					System.out.println(cmd.getCommand());
+
+					// Decode the command
+					decode(cmd);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage() + "\r\n");
+			} catch (ClassNotFoundException cnfe) {
+				System.out.println(cnfe.getMessage() + "\r\n");
 			}
+		}
+	}
+	
+	private void decode(Request cmd) {
+		try {
+			switch(cmd.getCommand()) {
+			// Initialize Chunk
+			case 0:
+				String handle = cs.initializeChunk();
+				oos.writeObject(new Response(handle, true, null));
+				oos.flush();
+				break;
+				
+			// Put Chunk
+			case 1:
+				boolean success = cs.putChunk(cmd.getHandle(), cmd.getPayload(), cmd.getOffset());
+				oos.writeObject(new Response(null, success, null));
+				oos.flush();
+				break;
+				
+			// Get Chunk
+			case 2:
+				byte[] payload = cs.getChunk(cmd.getHandle(), cmd.getOffset(), cmd.getBytes());
+				oos.writeObject(new Response(null, true, payload));
+				oos.flush();
+			}
+		} catch (IOException ioe) {
+			System.out.println("Request failed!");
 		}
 	}
 	
