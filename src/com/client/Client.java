@@ -1,5 +1,7 @@
 package com.client;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,12 +21,21 @@ public class Client implements ClientInterface {
 	private Socket socket;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
-	
+	private int port;
 	/**
 	 * Initialize the client
 	 */
 	public Client(){
-		// TODO: Read the port from the file
+		// Read the port from a local file
+		try {
+			FileReader fr = new FileReader("port.txt");
+			BufferedReader br = new BufferedReader(fr);
+			
+			port = Integer.parseInt(br.readLine());
+			br.close();
+		} catch(IOException ioe) {
+			System.out.println("Error reading the port config");
+		}
 		
 	}
 	
@@ -32,7 +43,7 @@ public class Client implements ClientInterface {
 		// Establish Connection
 		try {
 			//System.out.println("Trying to connect to server");
-			socket = new Socket("localhost", 4444);
+			socket = new Socket("localhost", port);
 			//System.out.println("Connected");
 			ois = new ObjectInputStream(socket.getInputStream());
 			oos = new ObjectOutputStream(socket.getOutputStream());

@@ -1,6 +1,9 @@
 package com.chunkserver;
 
+import java.io.BufferedWriter;
 import java.io.EOFException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,7 +40,16 @@ public class Server {
 			}
 		}
 		
-		// TODO: Output to a file for the client to reference
+		// Update the port file for the client to reference
+		try {
+			FileWriter fw = new FileWriter("port.txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			bw.write(Integer.toString(port));
+			bw.close();
+		} catch(IOException ioe) {
+			System.out.println("Port Reference update failed");
+		}
 		
 	}
 	
