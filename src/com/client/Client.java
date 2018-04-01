@@ -24,17 +24,16 @@ public class Client implements ClientInterface {
 	 * Initialize the client
 	 */
 	public Client(){
+		// TODO: Read the port from the file
 		
 	}
 	
 	private void connect() {
 		// Establish Connection
-
-		// TODO: Read the port from the file
 		try {
-			System.out.println("Trying to connect to server");
+			//System.out.println("Trying to connect to server");
 			socket = new Socket("localhost", 4444);
-			System.out.println("Connected");
+			//System.out.println("Connected");
 			ois = new ObjectInputStream(socket.getInputStream());
 			oos = new ObjectOutputStream(socket.getOutputStream());
 		} catch(IOException ioe) {
@@ -52,13 +51,13 @@ public class Client implements ClientInterface {
 			return null;
 		try {
 			// Send request
-			System.out.println("Sending request");
+			//System.out.println("Sending request");
 			oos.writeObject(new Request(0, null, null, -1, -1));
 			oos.flush();
 			
 			// Receive response
 			String handle = ((Response) ois.readObject()).getHandle();
-			System.out.println(handle);
+			//System.out.println(handle);
 			socket.close();
 			return handle;
 		} catch (IOException e) {
@@ -86,13 +85,13 @@ public class Client implements ClientInterface {
 
 		try {
 			// Send request
-			System.out.println("Sending request");
+			//System.out.println("Sending request");
 			oos.writeObject(new Request(1, ChunkHandle, payload, offset, -1));
 			oos.flush();
 			
 			// Receive response
 			boolean success = ((Response) ois.readObject()).isSuccess();
-			System.out.println(success);
+			//System.out.println(success);
 			socket.close();
 			
 			return success;
@@ -121,7 +120,7 @@ public class Client implements ClientInterface {
 
 		try {
 			// Send request
-			System.out.println("Sending request");
+			//System.out.println("Sending request");
 			oos.writeObject(new Request(2, ChunkHandle, null, offset, NumberOfBytes));
 			oos.flush();
 			

@@ -1,5 +1,6 @@
 package com.chunkserver;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,12 +38,13 @@ public class Server {
 		}
 		
 		// TODO: Output to a file for the client to reference
+		
 	}
 	
 	private Socket establishConnection() {
 		socket = null;
 		try {
-			System.out.println("Waiting for a connection...");
+			//System.out.println("Waiting for a connection...");
 			socket = ss.accept();
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
@@ -50,7 +52,7 @@ public class Server {
 			return null;
 		}
 		
-		System.out.println("A client is connected\r\n");
+		//System.out.println("A client is connected\r\n");
 		return socket;
 	}
 	
@@ -65,13 +67,14 @@ public class Server {
 				}
 				while(true) {
 					Request cmd = (Request) ois.readObject();
-					System.out.println(cmd.getCommand());
+					//System.out.println(cmd.getCommand());
 
 					// Decode the command
 					decode(cmd);
 				}
+			} catch (EOFException eofe) {
+				// Nothing to read - continue
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.out.println(e.getMessage() + "\r\n");
 			} catch (ClassNotFoundException cnfe) {
 				System.out.println(cnfe.getMessage() + "\r\n");
