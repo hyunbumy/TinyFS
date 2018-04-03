@@ -15,7 +15,11 @@ import com.client.Client;
 
 public class TestReadAndWrite {
 	
-	public static Client client = new Client();
+	public static Client client = null;
+	
+	public TestReadAndWrite(Client client) {
+		this.client = client;
+	}
 	
 	/**
 	 * Create and write chunk(s) of a physical file.

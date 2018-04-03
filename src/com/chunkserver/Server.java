@@ -1,6 +1,8 @@
 package com.chunkserver;
 
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -17,8 +19,8 @@ public class Server {
 	
 	// Instantiate a ChunkServer
 	public static ChunkServer cs = new ChunkServer();
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
+	private DataOutputStream dos;
+	private DataInputStream dis;
 	private ServerSocket ss;
 	private Socket socket;
 	
@@ -56,7 +58,7 @@ public class Server {
 	private Socket establishConnection() {
 		socket = null;
 		try {
-			//System.out.println("Waiting for a connection...");
+			System.out.println("Waiting for a connection...");
 			socket = ss.accept();
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
@@ -64,7 +66,7 @@ public class Server {
 			return null;
 		}
 		
-		//System.out.println("A client is connected\r\n");
+		System.out.println("A client is connected\r\n");
 		return socket;
 	}
 	
@@ -74,11 +76,11 @@ public class Server {
 			
 			try {			
 				if (socket != null) {
-					oos = new ObjectOutputStream(socket.getOutputStream());
-					ois = new ObjectInputStream(socket.getInputStream());
+					dos = new DataOutputStream(socket.getOutputStream());
+					dis = new DataInputStream(socket.getInputStream());
 				}
 				while(true) {
-					Request cmd = (Request) ois.readObject();
+					int cmd = dis.readInt();
 					//System.out.println(cmd.getCommand());
 
 					// Decode the command
@@ -88,34 +90,76 @@ public class Server {
 				// Nothing to read - continue
 			} catch (IOException e) {
 				System.out.println(e.getMessage() + "\r\n");
-			} catch (ClassNotFoundException cnfe) {
-				System.out.println(cnfe.getMessage() + "\r\n");
 			}
 		}
 	}
 	
-	private void decode(Request cmd) {
+	private void decode(int cmd) {
 		try {
-			switch(cmd.getCommand()) {
+			switch(cmd) {
 			// Initialize Chunk
 			case 0:
 				String handle = cs.initializeChunk();
-				oos.writeObject(new Response(handle, true, null));
-				oos.flush();
+				byte[] chunkHandle = handle.getBytes();
+				dos.writeInt(chunkHandle.length);
+				dos.write(chunkHandle);
+				dos.flush();
 				break;
 				
 			// Put Chunk
 			case 1:
-				boolean success = cs.putChunk(cmd.getHandle(), cmd.getPayload(), cmd.getOffset());
-				oos.writeObject(new Response(null, success, null));
-				oos.flush();
+				// Receive parameters
+				// ChunkHandle
+				int len = dis.readInt();
+				byte[] byteHandle = new byte[len];
+				for (int i=0; i<len; i++) {
+					byteHandle[i] = dis.readByte();
+				}
+				String strHandle = new String(byteHandle);
+				
+				// payload
+				len = dis.readInt();
+				byte[] pay = new byte[len];
+				for (int i = 0; i < len; i++) {
+					pay[i] = dis.readByte();
+				}
+				
+				// offset
+				len = dis.readInt();
+				int off = dis.readInt();
+				
+				boolean success = cs.putChunk(strHandle, pay, off);
+				if (success)
+					dos.writeInt(1);
+				else
+					dos.writeInt(0);
+				dos.flush();
 				break;
 				
 			// Get Chunk
 			case 2:
-				byte[] payload = cs.getChunk(cmd.getHandle(), cmd.getOffset(), cmd.getBytes());
-				oos.writeObject(new Response(null, true, payload));
-				oos.flush();
+				// ChunkHandle
+				len = dis.readInt();
+				byteHandle = new byte[len];
+				for (int i=0; i<len; i++) {
+					byteHandle[i] = dis.readByte();
+				}
+				strHandle = new String(byteHandle);
+				
+				// Offset
+				len = dis.readInt();
+				off = dis.readInt();
+				
+				// Numofbytes
+				len = dis.readInt();
+				int numBytes = dis.readInt();
+				
+				byte[] payload = cs.getChunk(strHandle, off, numBytes);
+				
+				// Send payload
+				dos.writeInt(payload.length);
+				dos.write(payload);
+				dos.flush();
 			}
 		} catch (IOException ioe) {
 			System.out.println("Request failed!");

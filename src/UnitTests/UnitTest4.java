@@ -2,6 +2,9 @@ package UnitTests;
 
 import java.io.File;
 
+import com.client.Client;
+
+
 /**
  * UnitTest4 for Part 1 of TinyFS
  * @author Shahram Ghandeharizadeh
@@ -23,7 +26,7 @@ public class UnitTest4 {
 			System.out.println("The file doesn't exist!");
 		}
 		//create and write chunk(s) of the file
-		TestReadAndWrite trw = new TestReadAndWrite();
+		TestReadAndWrite trw = new TestReadAndWrite(new Client());
 		MyChunks = trw.createFile(fin);
 		if(MyChunks != null){
         	System.out.println("Unit test 4 result: success!");
