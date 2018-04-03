@@ -125,7 +125,6 @@ public class Server {
 				}
 				
 				// offset
-				len = dis.readInt();
 				int off = dis.readInt();
 				
 				boolean success = cs.putChunk(strHandle, pay, off);
@@ -147,11 +146,9 @@ public class Server {
 				strHandle = new String(byteHandle);
 				
 				// Offset
-				len = dis.readInt();
 				off = dis.readInt();
 				
 				// Numofbytes
-				len = dis.readInt();
 				int numBytes = dis.readInt();
 				
 				byte[] payload = cs.getChunk(strHandle, off, numBytes);

@@ -107,9 +107,7 @@ public class Client implements ClientInterface {
 			// Send request
 			
 			// Format the request
-			byte[] command = ByteBuffer.allocate(4).putInt(1).array();
 			byte[] handle = ChunkHandle.getBytes();
-			byte[] off = ByteBuffer.allocate(4).putInt(offset).array();
 			
 			// Send command
 			dos.writeInt(1);
@@ -124,8 +122,6 @@ public class Client implements ClientInterface {
 			// Send payload
 			dos.write(payload);
 			
-			// Send size of the offset
-			dos.writeInt(off.length);
 			// Send offset
 			dos.writeInt(offset);			
 			
@@ -168,13 +164,9 @@ public class Client implements ClientInterface {
 			// Send handle
 			dos.write(handle);
 			
-			// Send size of the offset
-			dos.writeInt(4);
 			// Send offset
 			dos.writeInt(offset);		
 
-			// Send size of the number of bytes
-			dos.writeInt(4);
 			// Send byte num
 			dos.writeInt(NumberOfBytes);
 			
@@ -197,8 +189,5 @@ public class Client implements ClientInterface {
 		
 		return null;
 	}
-
-	
-
 
 }
