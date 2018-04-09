@@ -10,7 +10,7 @@ import com.client.Client;
 
 /**
  * UnitTest1 for Part 5 of TinyFS
- * @author Shahram Ghandeharizadeh
+ * @author Shahram Ghandeharizadeh and Jason Gui
  *
  */
 
@@ -38,17 +38,17 @@ public class UnitTest5 {
 		int lastChunkSize = (int) (fin.length() % ChunkServer.ChunkSize);
 		// create and write chunk(s) of the file
 		Client client = new Client();
-		TestReadAndWrite trw = new TestReadAndWrite(client);
+		TestReadAndWrite trw = new TestReadAndWrite();
 		MyChunks = trw.createFile(fin);
 		File fout = new File(outputFile);
 		FileOutputStream output = new FileOutputStream(fout);
 		for(int i = 0; i < MyChunks.length; i++){
 			byte[] data = null;
 			if(i != MyChunks.length - 1){
-				data = client.getChunk(MyChunks[i], 0, ChunkServer.ChunkSize);
+				data = client.readChunk(MyChunks[i], 0, ChunkServer.ChunkSize);
 				output.write(data, 0, data.length);
 			}else{
-				data = client.getChunk(MyChunks[i], 0, lastChunkSize);
+				data = client.readChunk(MyChunks[i], 0, lastChunkSize);
 				output.write(data, 0, lastChunkSize);
 			}
 		}

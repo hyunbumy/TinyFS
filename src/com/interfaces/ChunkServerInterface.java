@@ -1,8 +1,10 @@
 package com.interfaces;
 
+import java.io.File;
+
 /**
  * Interfaces of the CSCI 485 TinyFS ChunkServer
- * @author Shahram Ghandeharizaden
+ * @author Shahram Ghandeharizaden and Jason Gui
  *
  */
 public interface ChunkServerInterface {
@@ -12,17 +14,17 @@ public interface ChunkServerInterface {
 	/**
 	 * Return the chunkhandle for a newly created chunk.
 	 */
-	public String initializeChunk();
+	public String createChunk();
 	
 	/**
 	 * Write the byte array payload to the ChunkHandle at the specified offset.
 	 */
-	public boolean putChunk(String ChunkHandle, byte[] payload, int offset);
+	public boolean writeChunk(String ChunkHandle, byte[] payload, int offset);
 	
 	/**
 	 * Read the specified NumberOfBytes from the target chunk starting at the specified offset.
 	 * Return the retrieved number of bytes as a byte array.
 	 */
-	public byte[] getChunk(String ChunkHandle, int offset, int NumberOfBytes);	
+	public byte[] readChunk(String ChunkHandle, int offset, int NumberOfBytes);	
 
 }

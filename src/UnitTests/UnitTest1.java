@@ -7,7 +7,7 @@ import com.client.Client;
 
 /**
  * UnitTest1 for Part 1 of TinyFS
- * @author Shahram Ghandeharizadeh
+ * @author Shahram Ghandeharizadeh and Jason Gui
  *
  */
 
@@ -16,7 +16,7 @@ public class UnitTest1 {
 	/**
      * This unit test generates an array of 4K bytes where each byte = "1"
      */
-    public static String handle = null;
+    public static String handle = "1";
 	
 	public static void main(String[] args) {
 		test1();
@@ -35,12 +35,12 @@ public class UnitTest1 {
         boolean isSuccess = false;
         //Create the chunk and store its handle
         Client client = new Client();
-        handle = client.initializeChunk();
+        handle = client.createChunk();
         if(handle == null){
         	System.out.println("Unit test 1 result: fail!");
         	return;
         }
-        isSuccess = client.putChunk(handle, payload, 0);
+       isSuccess = client.writeChunk(handle, payload, 0);
         if(isSuccess == true){
         	System.out.println("Unit test 1 result: success!");
         }else{

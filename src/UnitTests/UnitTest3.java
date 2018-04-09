@@ -7,7 +7,7 @@ import com.client.Client;
 
 /**
  * UnitTest3 for Part 1 of TinyFS
- * @author Shahram Ghandeharizadeh
+ * @author Shahram Ghandeharizadeh and Jason Gui
  *
  */
 
@@ -39,8 +39,8 @@ public class UnitTest3 {
             }
             //Create the byte array
             //Create the chunk and store its handle in MyChunks[i]
-            MyChunks[i] = client.initializeChunk();
-            boolean isWritten = client.putChunk(MyChunks[i], payload, 0);
+            MyChunks[i] = client.createChunk();
+            boolean isWritten = client.writeChunk(MyChunks[i], payload, 0);
             if(isWritten == false){
             	System.out.println("Unit test 3 result: fail to write a chunk!");
             	return;
@@ -51,7 +51,7 @@ public class UnitTest3 {
             ChunkHandle = MyChunks[i];
             //ReadChunk using ChunkHandle to get an array of bytes
             byte[] data = new byte[ChunkServer.ChunkSize];
-            data = client.getChunk(ChunkHandle, 0, ChunkServer.ChunkSize);
+            data = client.readChunk(ChunkHandle, 0, ChunkServer.ChunkSize);
             byte[] ValInBytes = ByteBuffer.allocate(intSize).putInt(i).array();
             //Verify that the content of the array of bytes matches the value i
             for (int j=0; j < num; j++){

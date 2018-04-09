@@ -7,7 +7,7 @@ import com.client.Client;
 
 /**
  * UnitTest2 for Part 1 of TinyFS
- * @author Shahram Ghandeharizadeh
+ * @author Shahram Ghandeharizadeh and Jason Gui
  *
  */
 
@@ -24,7 +24,7 @@ public class UnitTest2 {
 		String handle = ut1.handle;
 		byte[] ValInBytes = ByteBuffer.allocate(4).putInt(1).array();
 		byte[] data = new byte[ChunkServer.ChunkSize];
-        data = client.getChunk(handle, 0, ChunkServer.ChunkSize);
+        data = client.readChunk(handle, 0, ChunkServer.ChunkSize);
         
         //Verify that the content of the array of bytes matches the value 1
         for (int j=0; j < 1024; j++){
